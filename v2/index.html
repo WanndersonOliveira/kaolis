@@ -6,14 +6,26 @@
 	<script type="text/javascript" src="..\jquery\dist\jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="..\bootstrap\dist\css\bootstrap.min.css">
 	<script type="text/javascript" src="..\bootstrap\dist\js\bootstrap.min.js"></script>
-	<script type="text/javascript" src="..\jquery\dist\jquery.slim.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
 </head>
 <body>
+	<script src="banco.js"></script>
+	<script>
+		var page = 1;
+	</script>
 	<style type="text/css">
 
 		#header {
 			height: 350px;
-			background-color: white;
+			background-color: #cc0066;
+		}
+
+		#logo {
+			position:relative; 
+			left:25%;
+			height: 350px; 
+			width: 50%; 
+			border-radius:50%;
 		}
 
 		#produtos {
@@ -46,26 +58,20 @@
 			border-top-width: 1px;
 		}
 
-		/*#produto2, #produto5{
-			background-color: green;
-		}
-
-		#produto3, #produto6{
-			background-color: red;
-		}*/
 
 		#preco, #titulo {
 			position: relative;
-			top: 20%;
+			top: 100px;
 			left: 55%;
 			font-family: Arial;
 			font-size: 4.0rem;
 		}
 
+
 		#titulo {
 			top: 10%;
 			left: 45%;
-			width: 500px;
+			width: 600px;
 			height: 100px;
 			font-size: 4.0rem;
 		}
@@ -74,7 +80,7 @@
 			position: relative;
 			top: -10%;
 			left: -15%;
-			height: 80%;
+			height: 70%;
 			width: 35%;
 			border-radius: 10%;
 		}
@@ -109,19 +115,18 @@
 		}
 	</style>
 
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12" id="header">
-				<img src="../img/logo.PNG" style="height: 350px; width: 100%;">
-			</div>
+
+	<div class="container-fluid" ng-app="app" ng-controller="ctrl">
+		<div class="row" id="header">
+		    <img src="../img/logo3.png" id="logo">
 		</div>
 
 		<div class="row" id="page">
 			<div class="col-sm-6"></div>
 			<div class="col-sm-6">
 				<ul class="pagination" id="paginacao">
-					<li class="page-item"><a href="#" class="page-link">Anterior</a></li>
-					<li class="page-item"><a href="#" class="page-link">Posterior</a></li>
+					<li class="page-item"><a href="" class="page-link" id="prev" ng-click="prev()">Anterior</a></li>
+					<li class="page-item"><a href="" class="page-link" id="next" ng-click="next()">Posterior</a></li>
 				</ul>
 			</div>
 		</div>
@@ -129,55 +134,18 @@
 		<div class="row" id="produtoLinha">
 
 			<div class="col-sm-12" id="produtos">
-				<div id="produto">
-					<p id="titulo"><a href="">Copo Tupperware para viagem</a></p>
-					<b id="preco">R$ 250</b>	
+				<div ng-repeat="produto in produtos">
+					<div id="{{ produto.id }}">
+					<p id="titulo"><a href="">{{ produto.titulo }}</a></p>
+					<b id="preco"> {{ produto.preco }}</b>	
 
-					<img id="img" src="../img/copo.jpg">
-				</div>
-
-				<div id="produto2">
-					
-					<p id="titulo"><a href="">Pote Tupperware p/café</a></p>
-					<b id="preco">R$ 250</b>	
-
-					<img id="img" src="../img/pote.jpg">
-				</div>
-				<div id="produto3">
-					
-					<p id="titulo"><a href="">Jarra Tupperware</a></p>
-					<b id="preco">R$ 250</b>	
-
-					<img id="img" src="../img/garrafa.jpg">
-				</div>
-
-				<div id="produto4">
-					
-					<p id="titulo"><a href="">Jarra Tupperware</a></p>
-					<b id="preco">R$ 250</b>	
-
-					<img id="img" src="../img/jarra.jpg">
-				</div>
-
-				<div id="produto5">
-					
-					<p id="titulo"><a href="">Descascador Tupperware</a></p>
-					<b id="preco">R$ 250</b>	
-
-					<img id="img" src="../img/desc.jpg">
+					<img id="img" src="{{ produto.img }}">
+					</div>
 				</div>	
-
-				<div id="produto6">
-					
-					<p id="titulo"><a href="">Pote Tupperware p/feijão</a></p>
-					<b id="preco">R$ 250</b>	
-
-					<img id="img" src="../img/pote2.jpg">
-				</div>
-			</div>
+			  </div>
 		</div>
-	</div>
 
+				
 	<div class="row" id="footer">
 		
 		<div id="contato">
@@ -185,5 +153,97 @@
 			<b id="tel">(84) 994786082</b>
 		</div>
 	</div>
+	<script>
+	  var app = angular.module('app',[]);
+	  app.controller('ctrl', function($scope){
+	      $scope.produtos = [];
+
+
+	      produtos.forEach(function (item,index){
+		    
+		    if(item.preco == 0){
+			item = null;
+		    }
+			
+		    if(!(item == null)){
+			if(item.img == ""){
+				item.img = "../img/img_indisp.jpg";
+		    	}
+
+		     
+		    	item.preco = "R$ "+item.preco;
+
+			if(item.page == page){
+			   $scope.produtos.push(item);
+			}
+		    }
+		});
+
+		$("#prev").hide();
+		
+		$scope.next = function(){
+			page++;
+
+			$scope.produtos = [];
+
+
+	      		produtos.forEach(function (item,index){
+		    
+		    		if(item.preco == 0){
+					item = null;
+		    		}
+			
+		    		if(!(item == null)){
+					if(item.img == ""){
+						item.img = "../img/img_indisp.jpg";
+		    		}
+
+
+				if(item.page == page){
+			   		$scope.produtos.push(item);
+				}
+		    	}
+			});
+
+			$("#prev").show();
+
+			if(produtos[(produtos.length-1)].page == page){
+				$("#next").hide();
+			}
+		}
+
+		
+		$scope.prev = function(){
+			page--;
+
+			$scope.produtos = [];
+
+
+	      		produtos.forEach(function (item,index){
+		    
+		    		if(item.preco == 0){
+					item = null;
+		    		}
+			
+		    		if(!(item == null)){
+					if(item.img == ""){
+						item.img = "../img/img_indisp.jpg";
+		    		}
+
+
+				if(item.page == page){
+			   		$scope.produtos.push(item);
+				}
+		    	}
+			});
+
+			$("#next").show();
+
+			if(page == 1){
+				$("#prev").hide();
+			}
+		}
+	  });
+	</script>
 </body>
 </html>
