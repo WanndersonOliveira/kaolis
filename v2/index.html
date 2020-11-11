@@ -10,6 +10,9 @@
 </head>
 <body>
 	<script src="banco.js"></script>
+	<script>
+		var page = 1;
+	</script>
 	<style type="text/css">
 
 		#header {
@@ -58,11 +61,12 @@
 
 		#preco, #titulo {
 			position: relative;
-			top: 30%;
+			top: 100px;
 			left: 55%;
 			font-family: Arial;
 			font-size: 4.0rem;
 		}
+
 
 		#titulo {
 			top: 10%;
@@ -76,7 +80,7 @@
 			position: relative;
 			top: -10%;
 			left: -15%;
-			height: 80%;
+			height: 70%;
 			width: 35%;
 			border-radius: 10%;
 		}
@@ -121,8 +125,8 @@
 			<div class="col-sm-6"></div>
 			<div class="col-sm-6">
 				<ul class="pagination" id="paginacao">
-					<li class="page-item"><a href="#" class="page-link">Anterior</a></li>
-					<li class="page-item"><a href="#" class="page-link">Posterior</a></li>
+					<li class="page-item"><a href="" class="page-link" id="prev" ng-click="prev()">Anterior</a></li>
+					<li class="page-item"><a href="" class="page-link" id="next" ng-click="next()">Posterior</a></li>
 				</ul>
 			</div>
 		</div>
@@ -133,7 +137,7 @@
 				<div ng-repeat="produto in produtos">
 					<div id="{{ produto.id }}">
 					<p id="titulo"><a href="">{{ produto.titulo }}</a></p>
-					<b id="preco">R$ {{ produto.preco }}</b>	
+					<b id="preco"> {{ produto.preco }}</b>	
 
 					<img id="img" src="{{ produto.img }}">
 					</div>
@@ -152,8 +156,93 @@
 	<script>
 	  var app = angular.module('app',[]);
 	  app.controller('ctrl', function($scope){
-	      console.log(produtos);
-	      $scope.produtos = produtos;
+	      $scope.produtos = [];
+
+
+	      produtos.forEach(function (item,index){
+		    
+		    if(item.preco == 0){
+			item = null;
+		    }
+			
+		    if(!(item == null)){
+			if(item.img == ""){
+				item.img = "../img/img_indisp.jpg";
+		    	}
+
+		     
+		    	item.preco = "R$ "+item.preco;
+
+			if(item.page == page){
+			   $scope.produtos.push(item);
+			}
+		    }
+		});
+
+		$("#prev").hide();
+		
+		$scope.next = function(){
+			page++;
+
+			$scope.produtos = [];
+
+
+	      		produtos.forEach(function (item,index){
+		    
+		    		if(item.preco == 0){
+					item = null;
+		    		}
+			
+		    		if(!(item == null)){
+					if(item.img == ""){
+						item.img = "../img/img_indisp.jpg";
+		    		}
+
+
+				if(item.page == page){
+			   		$scope.produtos.push(item);
+				}
+		    	}
+			});
+
+			$("#prev").show();
+
+			if(produtos[(produtos.length-1)].page == page){
+				$("#next").hide();
+			}
+		}
+
+		
+		$scope.prev = function(){
+			page--;
+
+			$scope.produtos = [];
+
+
+	      		produtos.forEach(function (item,index){
+		    
+		    		if(item.preco == 0){
+					item = null;
+		    		}
+			
+		    		if(!(item == null)){
+					if(item.img == ""){
+						item.img = "../img/img_indisp.jpg";
+		    		}
+
+
+				if(item.page == page){
+			   		$scope.produtos.push(item);
+				}
+		    	}
+			});
+
+			$("#next").show();
+
+			if(page == 1){
+				$("#prev").hide();
+			}
+		}
 	  });
 	</script>
 </body>
