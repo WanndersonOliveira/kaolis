@@ -87,4 +87,14 @@ var app = angular.module('app',[]);
 				$("#prev").hide();
 			}
 		}
+
+		$scope.myFunc = function(myE){
+			$scope.y = myE.pageY;
+
+			console.log(myE);
+
+			document.getElementById("painel").style.top=$scope.y+"px";
+			document.getElementById("painel").style.display="block";
+				
+		}
 	  });

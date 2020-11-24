@@ -36,13 +36,17 @@
 			<div class="col-sm-12" id="produtos">
 				<div ng-repeat="produto in produtos">
 					<div id="{{ produto.id }}">
-					<p id="titulo"><a href="">{{ produto.titulo }}</a></p>
+					<p id="titulo"><a href="https://wa.me/5584994786082?text=Olá Sandra,%20estou%20interessado(a)%20em%20{{ produto.titulo }}">{{ produto.titulo }}</a></p>
 					<b id="preco"> {{ produto.preco }}</b>	
 
 					<img id="img" src="{{ produto.img }}">
 					</div>
 				</div>	
-			  </div>
+			</div>
+
+			<div id="painel">
+				
+			</div>
 		</div>
 
 				
@@ -50,7 +54,7 @@
 		
 		<div id="contato">
 			<img src="img/whatsapp.png" id="whatsapp">
-			<b id="tel">(84) 994786082</b>
+			<a id="tel" href="tel:+5584994786082">(84) 994786082</a>
 		</div>
 	</div>
 	<script src="public/js/controller.js"></script>
